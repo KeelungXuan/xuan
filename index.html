@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HuiLing (XuanXuan) Huang - 個人網站</title>
+    <title>黃慧寧 (諼諼) - 個人網站</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -11,209 +11,428 @@
     <style>
         body {
             font-family: 'Inter', 'Noto Sans TC', sans-serif;
+            background-color: #f8fafc; /* bg-slate-50 */
         }
         .section-title {
-            @apply text-3xl font-bold text-gray-800 mb-8 text-center;
+            @apply text-3xl md:text-4xl font-bold text-slate-800 mb-12 text-center;
+        }
+        /* 動畫基礎設定 */
+        .fade-in-up {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.8s cubic-bezier(0.165, 0.84, 0.44, 1), transform 0.8s cubic-bezier(0.165, 0.84, 0.44, 1);
+        }
+        .fade-in-up.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        /* Hero 文字動畫 */
+        .hero-title, .hero-subtitle, .hero-text {
+            opacity: 0;
+            transform: translateY(20px);
+            animation-fill-mode: forwards;
+            animation-duration: 0.8s;
+            animation-timing-function: cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+        .hero-title { animation-name: fadeInUp; animation-delay: 0.2s; }
+        .hero-subtitle { animation-name: fadeInUp; animation-delay: 0.4s; }
+        .hero-text { animation-name: fadeInUp; animation-delay: 0.6s; }
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        /* 卡片懸停效果 */
+        .card-hover {
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+        }
+        /* 技能卡片流光效果 */
+        .skill-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -150%;
+            width: 75%;
+            height: 100%;
+            background: linear-gradient(to right, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.3) 50%, rgba(255, 255, 255, 0) 100%);
+            transform: skewX(-25deg);
+            transition: left 0.75s ease-in-out;
+        }
+        .skill-card:hover::before {
+            left: 150%;
+        }
+        /* Hero 粒子背景 */
+        #hero-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+        .hero-content {
+            position: relative;
+            z-index: 1;
+        }
+        /* 時間軸 */
+        .timeline-line {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 3px;
+            height: 100%;
+            background-color: #cbd5e1; /* slate-300 */
+        }
+        .timeline-item { position: relative; width: 100%; }
+        @media (min-width: 768px) {
+            .timeline-item { width: 50%; }
+            .timeline-item:nth-child(odd) { padding-right: 3rem; align-self: flex-start; }
+            .timeline-item:nth-child(even) { padding-left: 3rem; align-self: flex-end; }
+            .timeline-dot {
+                position: absolute;
+                top: 1.25rem;
+                background-color: white;
+                border: 3px solid #cbd5e1;
+                width: 1.25rem;
+                height: 1.25rem;
+                border-radius: 9999px;
+                transition: background-color 0.3s, border-color 0.3s;
+                transform: scale(0);
+            }
+            .timeline-item.is-visible .timeline-dot {
+                transform: scale(1);
+                transition-delay: 0.2s;
+                border-color: #4f46e5;
+            }
+            .timeline-item:nth-child(odd) .timeline-dot { right: -0.625rem; }
+            .timeline-item:nth-child(even) .timeline-dot { left: -0.625rem; }
+            .timeline-content { transition-delay: 0.4s; }
         }
     </style>
 </head>
-<body class="bg-gray-50 text-gray-700">
+<body class="text-slate-700">
 
     <!-- Header & Navbar -->
     <header class="bg-white/80 backdrop-blur-md shadow-sm sticky top-0 z-50">
         <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
-            <a href="#" class="text-2xl font-bold text-gray-800">HuiLing Huang</a>
+            <a href="#" class="text-2xl font-bold text-slate-800">黃慧寧 (諼諼)</a>
             <div class="hidden md:flex space-x-6 items-center">
-                <a href="#about" class="text-gray-600 hover:text-blue-600 transition duration-300">關於我</a>
-                <a href="#experience" class="text-gray-600 hover:text-blue-600 transition duration-300">工作經歷</a>
-                <a href="#skills" class="text-gray-600 hover:text-blue-600 transition duration-300">專業技能</a>
-                <a href="#contact" class="bg-blue-600 text-white px-4 py-2 rounded-full hover:bg-blue-700 transition duration-300">聯絡我</a>
+                <a href="#about" class="text-slate-600 hover:text-indigo-600 transition duration-300">關於我</a>
+                <a href="#experience" class="text-slate-600 hover:text-indigo-600 transition duration-300">專業經歷</a>
+                <a href="#skills" class="text-slate-600 hover:text-indigo-600 transition duration-300">核心能力</a>
+                <a href="#contact" class="bg-indigo-600 text-white px-4 py-2 rounded-full hover:bg-indigo-700 transition duration-300">建立連結</a>
             </div>
-            <button id="mobile-menu-button" class="md:hidden text-gray-800">
+            <button id="mobile-menu-button" class="md:hidden text-slate-800">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
             </button>
         </nav>
-        <!-- Mobile Menu -->
         <div id="mobile-menu" class="hidden md:hidden px-6 pb-4">
-            <a href="#about" class="block py-2 text-gray-600 hover:text-blue-600">關於我</a>
-            <a href="#experience" class="block py-2 text-gray-600 hover:text-blue-600">工作經歷</a>
-            <a href="#skills" class="block py-2 text-gray-600 hover:text-blue-600">專業技能</a>
-            <a href="#contact" class="block mt-2 bg-blue-600 text-white text-center px-4 py-2 rounded-full hover:bg-blue-700">聯絡我</a>
+            <a href="#about" class="block py-2 text-slate-600 hover:text-indigo-600">關於我</a>
+            <a href="#experience" class="block py-2 text-slate-600 hover:text-indigo-600">專業經歷</a>
+            <a href="#skills" class="block py-2 text-slate-600 hover:text-indigo-600">核心能力</a>
+            <a href="#contact" class="block mt-2 bg-indigo-600 text-white text-center px-4 py-2 rounded-full hover:bg-indigo-700">建立連結</a>
         </div>
     </header>
 
     <main>
         <!-- Hero Section -->
-        <section id="hero" class="bg-white">
-            <div class="container mx-auto px-6 py-24 md:py-32 flex flex-col items-center text-center">
-                <h1 class="text-4xl md:text-6xl font-extrabold text-gray-900 leading-tight">HuiLing (XuanXuan) Huang</h1>
-                <p class="mt-4 text-lg md:text-xl text-gray-600">資深商業領導者｜數位內容｜策略發展</p>
-                <p class="mt-6 max-w-3xl text-base text-gray-500">
-                    超過10年領導中小型企業的經驗，具備卓越的策略性賞識及遠見，能建立及執行複雜的計劃，並有明確支援業務需求的良好紀錄。
+        <section id="hero" class="relative overflow-hidden bg-slate-900">
+            <canvas id="hero-canvas"></canvas>
+            <div class="hero-content container mx-auto px-6 py-32 md:py-48 flex flex-col items-center text-center">
+                <h1 class="hero-title text-4xl md:text-6xl font-extrabold text-white leading-tight">黃慧寧 (諼諼)</h1>
+                <p class="hero-subtitle mt-4 text-lg md:text-xl text-slate-300">驅動數位媒體與科技領域的成長架構師</p>
+                <p class="hero-text mt-6 max-w-3xl text-base text-slate-400">
+                    一位戰績斐然的企業高階主管，專注於在數位媒體、內容與科技的交匯點上，架構企業轉型與成長的藍圖，為全球市場創造顛覆性的用戶體驗。
                 </p>
             </div>
         </section>
 
         <!-- About Me Section -->
-        <section id="about" class="py-20">
+        <section id="about" class="py-24 fade-in-up">
             <div class="container mx-auto px-6">
                 <h2 class="section-title">關於我</h2>
                 <div class="bg-white p-8 md:p-12 rounded-xl shadow-lg max-w-4xl mx-auto">
-                    <p class="mb-4 text-lg">
-                        我是一位以成果為導向的資深領導者，在影音音樂產品管理領域擁有超過20年的豐富經驗，並對網路產業抱持著深刻的理解與高度熱情。
+                    <div class="grid md:grid-cols-3 gap-8 text-center mb-10">
+                        <div>
+                            <div class="text-4xl font-bold text-indigo-600" data-counter-target="20">0</div>
+                            <p class="text-slate-500 mt-2">年以上產業資歷</p>
+                        </div>
+                        <div>
+                            <div class="text-4xl font-bold text-indigo-600" data-counter-target="300">0</div>
+                            <p class="text-slate-500 mt-2">% B2B2C 銷售增長</p>
+                        </div>
+                        <div>
+                            <div class="text-4xl font-bold text-indigo-600" data-counter-target="16">0</div>
+                            <p class="text-slate-500 mt-2">個跨國服務啟動</p>
+                        </div>
+                    </div>
+                    <p class="mb-4 text-lg text-slate-800">
+                        我的職業生涯橫跨超過二十年，始終站在數位媒體革命的最前線，專精於影音產品管理。我的專業根植於一個信念：活用網路的力量，將優質內容與全球觀眾緊密連結。
                     </p>
-                    <p class="mb-4">
-                        我全面了解音樂產業的商業流程，並在網路服務供應商領域累積了包含內容採購、市場行銷及產品發行的實務經驗。無論是從戰術或戰略層面解決問題，我都能夠獨立應用市場判斷力，並在必要時接受指導以達成目標。
+                    <p class="mb-4 text-slate-600">
+                        這段歷程讓我全面掌握了音樂產業的價值鏈—從策略性內容採購與版權談判，到創新的市場行銷與多平台發行。我擅長在高壓、快節奏的環境中應對挑戰，並持續交付卓越成果。
                     </p>
-                    <p class="text-gray-600">
-                        在香港JOOX任職期間，成功在三年內將業務由虧轉盈，並打造高效能團隊，使B2B2C銷售額增長300%，B2C銷售額增長150%。此外，也曾主導台灣MyMusic的品牌重塑，成功將其定位轉向更年輕的世代。
+                    <p class="text-slate-600">
+                        我的實績以「轉型領導力」為核心。我曾主導香港JOOX的營運轉型，在三年內帶領業務由虧轉盈。在台灣，我重新塑造了MyMusic的品牌策略，成功攻佔年輕市場，為服務注入全新活力。
                     </p>
                 </div>
             </div>
         </section>
 
         <!-- Experience Section -->
-        <section id="experience" class="py-20 bg-gray-100">
+        <section id="experience" class="py-24 bg-slate-100 fade-in-up">
             <div class="container mx-auto px-6">
-                <h2 class="section-title">工作經歷</h2>
-                <div class="relative max-w-4xl mx-auto">
-                    <!-- Timeline line -->
-                    <div class="absolute left-1/2 transform -translate-x-1/2 h-full w-0.5 bg-blue-300 hidden md:block"></div>
-                    
-                    <!-- Timeline Items -->
-                    <div class="space-y-12">
-                        <!-- JingMi -->
-                        <div class="relative">
-                            <div class="md:flex items-center md:space-x-8">
-                                <div class="md:w-1/2 text-left md:text-right md:pr-8">
-                                    <p class="text-blue-600 font-semibold">2023年1月 - 2025年3月</p>
-                                    <h3 class="text-xl font-bold text-gray-800">VP of Business Development</h3>
-                                    <p class="text-gray-600">JingMi, Taiwan</p>
-                                </div>
-                                <div class="mt-4 md:mt-0 md:w-1/2 md:pl-8">
-                                    <div class="bg-white p-6 rounded-lg shadow-md border-l-4 border-blue-500">
-                                        <p>制定全面的業務發展策略，識別市場機會與潛在合作夥伴，並與IC工程團隊緊密合作，推動硬體安全技術的產品開發。</p>
-                                    </div>
-                                </div>
-                            </div>
+                <h2 class="section-title">專業經歷</h2>
+                <div class="relative max-w-4xl mx-auto flex flex-col items-center">
+                    <div class="timeline-line hidden md:block"></div>
+                    <!-- Experience Items -->
+                    <div class="timeline-item">
+                        <div class="md:timeline-dot"></div>
+                        <div class="timeline-content fade-in-up bg-white p-6 rounded-lg shadow-md card-hover">
+                            <p class="text-sm text-indigo-600 font-semibold">2023年1月 - 2025年3月</p>
+                            <h3 class="text-xl font-bold text-slate-800 mt-1">業務開發副總裁</h3>
+                            <p class="text-slate-600 mb-3">JingMi, Taiwan</p>
+                            <p class="text-slate-500">作為前瞻硬體安全新創的關鍵領導者，我驅動整體業務發展策略，精準識別市場機會並建立戰略合作夥伴關係。我成功串連商業與工程團隊，為下一代加密晶片的技術發展做出直接貢獻。</p>
                         </div>
-
-                        <!-- Tencent JOOX -->
-                        <div class="relative">
-                            <div class="md:flex flex-row-reverse items-center md:space-x-8 md:space-x-reverse">
-                                <div class="md:w-1/2 text-left md:pl-8">
-                                     <p class="text-blue-600 font-semibold">2019年3月 - 2022年</p>
-                                     <h3 class="text-xl font-bold text-gray-800">Head of JOOX Hong Kong & Head of License</h3>
-                                     <p class="text-gray-600">Tencent, Hong Kong</p>
-                                </div>
-                                <div class="mt-4 md:mt-0 md:w-1/2 md:pr-8">
-                                    <div class="bg-white p-6 rounded-lg shadow-md border-l-4 md:border-l-0 md:border-r-4 border-blue-500">
-                                         <p>負責整體業務營運、財務績效與策略規劃，領導團隊達成目標，並深入了解市場與產業動態，確保公司成長。</p>
-                                    </div>
-                                </div>
-                            </div>
+                    </div>
+                     <div class="timeline-item mt-8 md:mt-0">
+                        <div class="md:timeline-dot"></div>
+                         <div class="timeline-content fade-in-up bg-white p-6 rounded-lg shadow-md card-hover">
+                           <p class="text-sm text-indigo-600 font-semibold">2019年3月 - 2022年</p>
+                           <h3 class="text-xl font-bold text-slate-800 mt-1">香港JOOX負責人 & 授權主管</h3>
+                           <p class="text-slate-600 mb-3">Tencent, Hong Kong</p>
+                           <p class="text-slate-500">我肩負完整的損益責任，成功帶領串流服務達成市場領先與盈利目標。我打造高績效文化，使B2B2C銷售額增長300%，B2C增長150%，同時有效優化內容採購成本。</p>
                         </div>
-
-                        <!-- Taiwan Mobile -->
-                        <div class="relative">
-                           <div class="md:flex items-center md:space-x-8">
-                                <div class="md:w-1/2 text-left md:text-right md:pr-8">
-                                    <p class="text-blue-600 font-semibold">2017年3月 - 2018年</p>
-                                    <h3 class="text-xl font-bold text-gray-800">VP of MyMusic / Deputy Director</h3>
-                                    <p class="text-gray-600">Taiwan Mobile, Taiwan</p>
-                                </div>
-                                <div class="mt-4 md:mt-0 md:w-1/2 md:pl-8">
-                                    <div class="bg-white p-6 rounded-lg shadow-md border-l-4 border-blue-500">
-                                        <p>為MyMusic發展品牌識別與新願景，管理整體損益，並監督產品、行銷、公關等多個團隊，塑造跨平台的音樂體驗。</p>
-                                    </div>
-                                </div>
-                            </div>
+                    </div>
+                     <div class="timeline-item mt-8 md:mt-0">
+                        <div class="md:timeline-dot"></div>
+                         <div class="timeline-content fade-in-up bg-white p-6 rounded-lg shadow-md card-hover">
+                           <p class="text-sm text-indigo-600 font-semibold">2017年3月 - 2018年</p>
+                           <h3 class="text-xl font-bold text-slate-800 mt-1">MyMusic副總裁 / 副處長</h3>
+                           <p class="text-slate-600 mb-3">Taiwan Mobile, Taipei, Taiwan</p>
+                           <p class="text-slate-500">我為MyMusic重新定義品牌識別與願景，成功將服務重新定位於年輕客群。透過領導跨職能團隊，我重塑了用戶體驗，並在新興智慧裝置上有效提升用戶參與度。</p>
                         </div>
-                        
-                        <!-- HTC -->
-                        <div class="relative">
-                            <div class="md:flex flex-row-reverse items-center md:space-x-8 md:space-x-reverse">
-                                <div class="md:w-1/2 text-left md:pl-8">
-                                     <p class="text-blue-600 font-semibold">2011年3月 - 2016年3月</p>
-                                     <h3 class="text-xl font-bold text-gray-800">Sr. Director, Global Content Division</h3>
-                                     <p class="text-gray-600">HTC Corporation, Taiwan</p>
-                                </div>
-                                <div class="mt-4 md:mt-0 md:w-1/2 md:pr-8">
-                                    <div class="bg-white p-6 rounded-lg shadow-md border-l-4 md:border-l-0 md:border-r-4 border-blue-500">
-                                         <p>負責電影授權、數位內容服務與行銷合作，包含推出HTC Watch電影服務及VR內容合作，並主導與小勞勃道尼的代言合約談判。</p>
-                                    </div>
-                                </div>
-                            </div>
+                    </div>
+                     <div class="timeline-item mt-8 md:mt-0">
+                        <div class="md:timeline-dot"></div>
+                         <div class="timeline-content fade-in-up bg-white p-6 rounded-lg shadow-md card-hover">
+                           <p class="text-sm text-indigo-600 font-semibold">2011年3月 - 2016年3月</p>
+                           <h3 class="text-xl font-bold text-slate-800 mt-1">全球內容部門資深總監</h3>
+                           <p class="text-slate-600 mb-3">HTC Corporation, Taipei, Taiwan</p>
+                           <p class="text-slate-500">我主導HTC的全球內容策略，領導團隊在16個國家推出HTC Watch電影服務。我的職責涵蓋高風險的內容版權談判、VR體驗合作，以及與小勞勃道尼等國際巨星的指標性代言合作案。</p>
                         </div>
-
+                    </div>
+                    <div class="timeline-item mt-8 md:mt-0">
+                        <div class="md:timeline-dot"></div>
+                         <div class="timeline-content fade-in-up bg-white p-6 rounded-lg shadow-md card-hover">
+                           <p class="text-sm text-indigo-600 font-semibold">2010年10月 - 2011年3月</p>
+                           <h3 class="text-xl font-bold text-slate-800 mt-1">音樂解決方案資深產品經理</h3>
+                           <p class="text-slate-600 mb-3">Nokia Corporation, Beijing, China</p>
+                           <p class="text-slate-500">負責Nokia在中國市場的音樂服務產品策略與解決方案，推動產品以滿足本地用戶需求。</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item mt-8 md:mt-0">
+                        <div class="md:timeline-dot"></div>
+                         <div class="timeline-content fade-in-up bg-white p-6 rounded-lg shadow-md card-hover">
+                           <p class="text-sm text-indigo-600 font-semibold">2008年3月 - 2010年10月</p>
+                           <h3 class="text-xl font-bold text-slate-800 mt-1">行銷主管</h3>
+                           <p class="text-slate-600 mb-3">Sony Music, Beijing, China</p>
+                           <p class="text-slate-500">在北京領導Sony Music的行銷部門，負責旗下藝人的市場推廣與品牌建立。</p>
+                        </div>
+                    </div>
+                     <div class="timeline-item mt-8 md:mt-0">
+                        <div class="md:timeline-dot"></div>
+                         <div class="timeline-content fade-in-up bg-white p-6 rounded-lg shadow-md card-hover">
+                           <p class="text-sm text-indigo-600 font-semibold">2005年5月 - 2008年7月</p>
+                           <h3 class="text-xl font-bold text-slate-800 mt-1">音樂與銷售方案資深產品經理</h3>
+                           <p class="text-slate-600 mb-3">Yahoo! Taiwan, Taipei, Taiwan</p>
+                           <p class="text-slate-500">在媒體部門負責音樂產品與銷售方案，結合內容與電子商務，創造新的營收模式。</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item mt-8 md:mt-0">
+                        <div class="md:timeline-dot"></div>
+                         <div class="timeline-content fade-in-up bg-white p-6 rounded-lg shadow-md card-hover">
+                           <p class="text-sm text-indigo-600 font-semibold">1998年 - 2002年</p>
+                           <h3 class="text-xl font-bold text-slate-800 mt-1">大中華區總監特助 & 創意行銷經理</h3>
+                           <p class="text-slate-600 mb-3">BMG Music & Sony Music Taiwan</p>
+                           <p class="text-slate-500">在職業生涯早期，於國際唱片公司擔任關鍵角色，負責創意行銷與高階主管特助，奠定深厚的產業基礎。</p>
+                        </div>
                     </div>
                 </div>
             </div>
         </section>
 
         <!-- Skills Section -->
-        <section id="skills" class="py-20">
+        <section id="skills" class="py-24 fade-in-up">
             <div class="container mx-auto px-6">
-                <h2 class="section-title">專業技能</h2>
+                <h2 class="section-title">核心能力</h2>
                 <div class="max-w-5xl mx-auto grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 text-center">
-                    <div class="bg-white p-4 rounded-lg shadow-md">決策能力</div>
-                    <div class="bg-white p-4 rounded-lg shadow-md">適應性</div>
-                    <div class="bg-white p-4 rounded-lg shadow-md">談判與溝通</div>
-                    <div class="bg-white p-4 rounded-lg shadow-md">策略領導</div>
-                    <div class="bg-white p-4 rounded-lg shadow-md">創意問題解決</div>
-                    <div class="bg-white p-4 rounded-lg shadow-md">團隊建設</div>
-                    <div class="bg-white p-4 rounded-lg shadow-md">專案管理</div>
-                    <div class="bg-white p-4 rounded-lg shadow-md">分析思維</div>
-                    <div class="bg-white p-4 rounded-lg shadow-md">內容採購</div>
-                    <div class="bg-white p-4 rounded-lg shadow-md">數位內容業務</div>
-                    <div class="bg-white p-4 rounded-lg shadow-md">網路與行動洞察</div>
-                    <div class="bg-white p-4 rounded-lg shadow-md">時間管理</div>
+                    <div class="skill-card bg-white p-5 rounded-lg card-hover">策略領導力</div>
+                    <div class="skill-card bg-white p-5 rounded-lg card-hover">商業開發</div>
+                    <div class="skill-card bg-white p-5 rounded-lg card-hover">損益管理 (P&L)</div>
+                    <div class="skill-card bg-white p-5 rounded-lg card-hover">數位內容策略</div>
+                    <div class="skill-card bg-white p-5 rounded-lg card-hover">內容採購與談判</div>
+                    <div class="skill-card bg-white p-5 rounded-lg card-hover">品牌管理</div>
+                    <div class="skill-card bg-white p-5 rounded-lg card-hover">團隊建立與激勵</div>
+                    <div class="skill-card bg-white p-5 rounded-lg card-hover">產品管理</div>
+                    <div class="skill-card bg-white p-5 rounded-lg card-hover">市場行銷與增長</div>
+                    <div class="skill-card bg-white p-5 rounded-lg card-hover">跨國市場洞察</div>
+                    <div class="skill-card bg-white p-5 rounded-lg card-hover">新創企業營運</div>
+                    <div class="skill-card bg-white p-5 rounded-lg card-hover">策略夥伴關係</div>
                 </div>
             </div>
         </section>
 
         <!-- Contact Section -->
-        <section id="contact" class="bg-blue-700 text-white">
+        <section id="contact" class="bg-indigo-700 text-white fade-in-up">
             <div class="container mx-auto px-6 py-20 text-center">
-                <h2 class="text-3xl font-bold mb-4">聯絡我</h2>
-                <p class="mb-8 max-w-2xl mx-auto">我樂於探索新的機會與挑戰。如果您對我的背景感興趣，或是有任何合作想法，歡迎隨時與我聯繫。</p>
-                <div class="flex flex-col md:flex-row justify-center items-center space-y-4 md:space-y-0 md:space-x-8">
-                     class="text-lg bg-white text-blue-700 px-6 py-3 rounded-full font-semibold hover:bg-gray-100 transition-all duration-300 flex items-center space-x-2">
-                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"><path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"></path><path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"></path></svg>
-                
-                    </a>
-                     <div class="text-lg bg-white text-blue-700 px-6 py-3 rounded-full font-semibold flex items-center space-x-2">
-                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"><path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"></path></svg>
-                    
-                    </div>
-                </div>
+                <h2 class="text-3xl font-bold mb-4">建立連結</h2>
+                <p class="mb-8 max-w-2xl mx-auto text-indigo-200">我對在數位媒體與科技領域共創未來充滿熱情。若您有合作、策略夥伴或顧問諮詢的需求，歡迎透過專業社群網路與我聯繫。</p>
             </div>
         </section>
     </main>
 
     <!-- Footer -->
-    <footer class="bg-gray-800 text-white">
-        <div class="container mx-auto px-6 py-6 text-center">
-            <p>&copy; 2025 HuiLing (XuanXuan) Huang. All Rights Reserved.</p>
+    <footer class="bg-slate-800 text-white">
+        <div class="container mx-auto px-6 py-6 text-center text-slate-400">
+            <p>&copy; 2025 黃慧寧 (諼諼). All Rights Reserved.</p>
         </div>
     </footer>
 
     <script>
-        // Mobile menu toggle
+        // --- Mobile menu toggle ---
         const mobileMenuButton = document.getElementById('mobile-menu-button');
         const mobileMenu = document.getElementById('mobile-menu');
-
         mobileMenuButton.addEventListener('click', () => {
             mobileMenu.classList.toggle('hidden');
         });
-        
-        // Close mobile menu when a link is clicked
         const mobileMenuLinks = mobileMenu.getElementsByTagName('a');
         for (let link of mobileMenuLinks) {
             link.addEventListener('click', () => {
                  mobileMenu.classList.add('hidden');
             });
         }
+        
+        // --- Counter Animation ---
+        function animateCounter(element) {
+            const target = +element.getAttribute('data-counter-target');
+            let current = 0;
+            const increment = target / 100;
+            const interval = setInterval(() => {
+                current += increment;
+                if (current >= target) {
+                    element.innerText = target.toLocaleString();
+                    clearInterval(interval);
+                } else {
+                    element.innerText = Math.ceil(current).toLocaleString();
+                }
+            }, 20);
+        }
+
+        // --- Intersection Observer for animations ---
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                    // Animate counters
+                    if (entry.target.id === 'about') {
+                        const counters = entry.target.querySelectorAll('[data-counter-target]');
+                        counters.forEach(animateCounter);
+                    }
+                    // Staggered animation for skills
+                    if (entry.target.id === 'skills') {
+                        const skillCards = entry.target.querySelectorAll('.skill-card');
+                        skillCards.forEach((card, index) => {
+                            setTimeout(() => {
+                                card.classList.add('is-visible');
+                            }, index * 80);
+                        });
+                    }
+                     // Animate timeline items
+                    if (entry.target.id === 'experience') {
+                         const timelineItems = entry.target.querySelectorAll('.timeline-item');
+                         timelineItems.forEach((item, index) => {
+                             setTimeout(() => {
+                                 item.classList.add('is-visible');
+                             }, index * 200);
+                         });
+                    }
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, {
+            threshold: 0.1 
+        });
+        document.querySelectorAll('.fade-in-up').forEach(section => {
+            observer.observe(section);
+        });
+
+        // --- Hero Canvas Particle Animation ---
+        const canvas = document.getElementById('hero-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        function resizeCanvas() {
+            canvas.width = canvas.offsetWidth;
+            canvas.height = canvas.offsetHeight;
+        }
+        function createParticles() {
+            particles = [];
+            if (canvas.width === 0) return;
+            const particleCount = Math.floor(canvas.width * canvas.height / 12000);
+            for (let i = 0; i < particleCount; i++) {
+                particles.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    vx: (Math.random() - 0.5) * 0.6,
+                    vy: (Math.random() - 0.5) * 0.6,
+                    radius: Math.random() * 1.5 + 0.5
+                });
+            }
+        }
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => {
+                p.x += p.vx; p.y += p.vy;
+                if (p.x < 0 || p.x > canvas.width) p.vx *= -1;
+                if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.2)';
+                ctx.fill();
+            });
+            for (let i = 0; i < particles.length; i++) {
+                for (let j = i + 1; j < particles.length; j++) {
+                    const dx = particles[i].x - particles[j].x;
+                    const dy = particles[i].y - particles[j].y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+                    if (dist < 120) {
+                        ctx.beginPath();
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.strokeStyle = `rgba(255, 255, 255, ${1 - dist / 120})`;
+                        ctx.lineWidth = 0.5;
+                        ctx.stroke();
+                    }
+                }
+            }
+            requestAnimationFrame(animate);
+        }
+        window.addEventListener('load', () => {
+            resizeCanvas();
+            createParticles();
+            requestAnimationFrame(animate);
+        });
+        window.addEventListener('resize', () => {
+             resizeCanvas();
+             createParticles();
+        });
     </script>
 </body>
 </html>
